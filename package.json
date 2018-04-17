@@ -1,0 +1,17 @@
+{
+  "name": "restapi",
+  "version": "1.0.0",
+  "description": "Simple Rest Api",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon api/index.js"
+  },
+  "author": "Antonio Ballesteros",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mongoose": "^5.0.14",
+    "nodemon": "^1.17.3"
+  }
+}
