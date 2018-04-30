@@ -38,7 +38,7 @@ function addItem (req, res) {
 function updateItem (req, res){
     Item.findById(req.params.itemId, function (err, item){
         if (!item) {
-            return res.status(500).send('No se puede cargar el documento')}
+            return res.status(500).send('Can not load document')}
         else{
             item.name = req.body.name
             item.image = req.body.image
@@ -47,7 +47,7 @@ function updateItem (req, res){
                     res.status(200).json({item: item})
                 })
                 .catch(err => {
-                    res.status(400).send('No se puede actualizar')
+                    res.status(400).send('Could not update the item')
                 })
             }
         })
