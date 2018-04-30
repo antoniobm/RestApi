@@ -4,10 +4,10 @@ const Item = require('../model/item')
 
 //Get all items 
 function getItems (req, res) {
-    Item.find( {}, (err, items) => {
+    Item.find( {}, (err, item) => {
         if(err) return res.status(500).send({ message: `Error making request to server: ${err}`})
-        if(!items) return res.status(404).send({ message: 'Items does not exist.'})
-        res.send(200, {items})
+        if(!item) return res.status(404).send({ message: 'Items does not exist.'})
+        res.status(200).json({item})
     })
 }
 
@@ -18,7 +18,7 @@ function getItem (req, res) {
     Item.findById( itemId, (err, item) => {
         if(err) return res.status(500).send({ message: `Error making request to server: ${err}`})
         if(!item) return res.status(404).send({ message: 'Item does not exist'})
-        res.send(200, {item})
+        res.status(200).json({item: item})
     })
 }
 
@@ -36,18 +36,21 @@ function addItem (req, res) {
 
 //Update item by Id
 function updateItem (req, res){
-    let itemId = req.params.itemId
-    let update= req.body
-
-    Item.findByIdAndUpdate(itemId, update, (err, itemUpdated) =>{
-        if(err){
-            return res.status(500).send({ message: `Item could not be updated: ${err}` })}
-        else if (!itemUpdated){ 
-            return res.status(404).send({ message: 'Item does not exist' })}
+    Item.findById(req.params.itemId, function (err, item){
+        if (!item) {
+            return res.status(500).send('No se puede cargar el documento')}
         else{
-            res.status(200).send({message: 'Update complete'})
-        }
-    })
+            item.name = req.body.name
+            item.image = req.body.image
+            item.save()
+                .then(item => {
+                    res.status(200).json({item: item})
+                })
+                .catch(err => {
+                    res.status(400).send('No se puede actualizar')
+                })
+            }
+        })
 }
 
 // Delete item by Id
